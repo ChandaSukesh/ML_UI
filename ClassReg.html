@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 7px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            margin-left: 8%;
+        }
+
+        .neonText {
+            text-align: center;
+            color: #fff;
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0fa,
+                0 0 82px #0fa,
+                0 0 92px #0fa,
+                0 0 102px #0fa,
+                0 0 151px #0fa;
+        }
+
+        .tablesetting {
+
+            margin-left: 20%;
+            width: 58%;
+            height: 70%;
+            background-color: white
+        }
+
+        /* 2nd component */
+        .fileuploading {
+            background-color: white;
+            /* padding-top: 1%; */
+            padding-bottom: 1%;
+            margin-left: 30%;
+            margin-right: 30%;
+            text-align: center;
+        }
+
+        .card {
+            background-color: white;
+            color: white;
+            /* padding-left: 10%; */
+            width: 40%;
+            margin-right: 90%;
+            margin-left: 10%;
+            margin-top: 5%;
+        }
+
+        .head {
+
+            background-color: #008000;
+            color: whitesmoke;
+            /* padding-left: 10%; */
+            text-align: center;
+
+
+        }
+
+        .body {
+            background-color: rgb(207, 205, 205);
+            color: black;
+            /* padding-left: 10%; */
+
+        }
+
+
+        #cursive {
+            font-family: cursive;
+            font-size: large;
+            padding-left: 2%;
+        }
+
+        /* Float four columns side by side */
+        .column {
+            float: left;
+            width: 50%;
+            /* padding: 0 10px; */
+        }
+
+        /* Remove extra left and right margins, due to padding */
+        .row {
+            /* margin: 0 -1px; */
+            margin-left: 20%;
+        }
+
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(204, 49, 49, 0.2);
+            padding: 16px;
+            text-align: center;
+            background-color: #f1f1f1;
+            width: 40%;
+        }
+    </style>
+</head>
+
+<body style="background-color:#010a01;">
+
+    <h1 class="neonText">MACHINE LEARNING TOOL BOX</h1>
+
+    <div class="fileuploading">
+        <h1>File has been uploaded successfully</h1>
+        <!-- <h3>Model Name: {{fname}}</h3> -->
+        <h2>Next step is to choose a type:</h2>
+    </div>
+
+    <div class="row">
+        <div class="column">
+            <div class="card">
+                <h3 id="cursive" class="head">Classfication</h3>
+                <p id="cursive" class="body">Classification is used to predict discrete variables such
+                    as
+                    Yes or No, True or False, 0 or 1, Success or Failure.</p>
+                <input type="submit" value="Click Here!" class="submit">
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <h3 id="cursive" class="head">Regression</h3>
+                <p id="cursive" class="body">Regression is a kind of model which is used where the values are continuous
+                    such as
+                    predicting weather data, prices of houses etc.</p>
+                <form action="{{ url_for('MainFunction') }}" method="POST">
+                    <input type="submit" value="Click Here!" class="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- {{reads}} -->
+</body>
+
+</html>
