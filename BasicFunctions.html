@@ -81,10 +81,12 @@
         #tableStyle tr:hover {
             background-color: rgb(165, 243, 129);
         }
+
+      
     </style>
 </head>
 
-<body style="background-color:#010a01;">
+<body style="background-color: black;">
     <h1 class="neonText">MACHINE LEARNING TOOL BOX</h1>
     <div class="whitebox">
         <form action="{{ url_for('showData') }}" method="POST">
@@ -99,7 +101,7 @@
         <h2 style="margin-top: 1%;">{{message}}</h2>
     </div>
 
-    
+    {%if flag==1%}
     <div id="tableStyle">
         <table>
             {% for i in h%}
@@ -111,7 +113,12 @@
             {%endfor%}
         </table>
     </div>
+    {%endif%}
 
+    {%if flag==2%}
+    <!-- for predicted option -->
+        
+    {%endif%}
 </body>
 
 </html>

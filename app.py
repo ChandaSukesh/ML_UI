@@ -33,12 +33,16 @@ def showData():
     if(type=="Head"):
         content=df.head()
         message="The below table displays the top 5 rows in a given dataset"
+        flag=1
     if(type=="Describe"):
         content=df.describe()
         message="The below table displays entire rows in a given dataset"
-    # if(type=="Predict"):
-    #     message="Please select the Learning rate and Epochs values of your choice"
-    return render_template('BasicFunctions.html', h=content.values.tolist(),message=message)
+        flag=1
+    if(type=="Predict"):
+        message="Select the Learning rate and Epochs values of your choice"
+        flag=2
+        content=df
+    return render_template('BasicFunctions.html', h=content.values.tolist(),message=message,flag=flag)
     # 
 
 if __name__ =='__main__':  
