@@ -103,6 +103,14 @@
             background-color: #f1f1f1;
             width: 40%;
         }
+
+        /* for naming of model */
+        .fontStyle {
+            font: 500 30px/1.3 'Oleo Script', Helvetica, sans-serif;
+            color: #2b2b2b;
+            text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
+            background-color: rgb(221, 182, 182);
+        }
     </style>
 </head>
 
@@ -110,9 +118,10 @@
 
     <h1 class="neonText">MACHINE LEARNING TOOL BOX</h1>
 
+    
     <div class="fileuploading">
         <h1>File has been uploaded successfully</h1>
-        <!-- <h3>Model Name: {{fname}}</h3> -->
+        <h3 class="fontStyle">Model Name: {{modelName}}</h3>
         <h2>Next step is to choose a type:</h2>
     </div>
 
@@ -123,9 +132,9 @@
                 <p id="cursive" class="body">Classification is used to predict discrete variables such
                     as
                     Yes or No, True or False, 0 or 1, Success or Failure.</p>
-                    <form action="{{ url_for('MainFunction') }}" method="POST">
-                        <input type="submit" value="Click Here!" class="submit" id="{{reads}}">
-                    </form>
+                <form action="{{ url_for('MainFunction') }}" method="POST">
+                    <input type="submit" value="Click Here!" class="submit" id="{{reads}}">
+                </form>
             </div>
         </div>
 

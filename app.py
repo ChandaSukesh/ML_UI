@@ -15,16 +15,18 @@ def index():
 def textfile():
     filename=request.form.get("filename")
     df = pd.read_csv(filename,header=None)
-    # session["data"]=df
+    
+    if len(df.columns)>2:
+        modelName="Multi Variate"
+    else:
+        modelName="Uni Variate"
     session["df"]=df.values.tolist()
     print(type(session["df"]))
-    return render_template('ClassReg.html',reads=df.values.tolist())
+    return render_template('ClassReg.html',reads=df.values.tolist() ,modelName=modelName)
 
 @app.route('/MainFunction', methods = ['GET','POST'])
 def MainFunction():
     df=session["df"]
-    print(df)
-    # filename=request.form.get("")
     return render_template('BasicFunctions.html')
 
 @app.route('/showData', methods = ['GET','POST'])
@@ -52,82 +54,31 @@ def showData():
 def linearregression():
     data=session["df"]
     data=pd.DataFrame(data)
-    # print(type(data))
-
+    print(data)
     filename=request.form.get("filename")
+    col_length=len(data.columns)
+    if(col_length>2):
+        model= 2      #multivariate
+    else:
+        model= 1   #univariate
     
-    model=1 # change it to dynamically
     test_data  = pd.read_csv(filename,header=None)
     learning_rate= float(request.form.get("fname1"))    
     epochs=int(request.form.get("fname2"))
-    theta_values, J_history, X, y,Original_mean,Original_std = procedure(data, learning_rate, epochs,model)
+    
+    theta_values, J_history, X, y = procedure(data, learning_rate, epochs, model)
+    
     dftest = test_data.values
     len_of_testdata = dftest[:, 0].size
-    if model == 0:
-        xCount = 1
-    else:
-        xCount = len(test_data.columns)
-    
-    testX=dftest[:, 0: len(test_data.columns) ].reshape(len_of_testdata, xCount)
     if model == 1:
-        testX = (testX - Original_mean) / Original_std
-    test = np.append(np.ones((len_of_testdata, 1)), testX,axis=1)
+        test = np.append(np.ones((len_of_testdata, 1)), dftest[:, 0].reshape(len_of_testdata, 1),
+                            axis=1)
+    else:
+        test = dftest[:, 0:model].reshape(len_of_testdata, 2)
+        test, mean_test, std_test = featureNormalization(test)
+        test = np.append(np.ones((len_of_testdata, 1)), test, axis=1)
     predict1 = predict(test, theta_values)
-    # print(predict1)
-
     return render_template('linear.html',predict1=predict1)
-    # ,predict1=predict1 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # # print(epochs)
-    # # print("**************")
-    # # print("chanda")
-    # theta_values, J_history, X, y,Original_mean,Original_std = procedure(test_data, learning_rate, epochs,model)
-    # print(theta_values)
-    # dftest = test_data.values
-    # len_of_testdata = dftest[:, 0].size
-    
-    # # if model == 1:
-    # #     test = np.append(np.ones((len_of_testdata, 1)), dftest[:, 0].reshape(len_of_testdata, 1),axis=1)
-    # # else:
-    # #     test = dftest[:, 0:model].reshape(len_of_testdata, 2)
-    # #     test, mean_test, std_test = featureNormalization(test)
-    # #     test = np.append(np.ones((len_of_testdata, 1)), test, axis=1)
-
-    # if model == 0:
-    #     xCount = 1
-    # else:
-    #     xCount = len(test_data.columns)
-    # testX=dftest[:, 0: len(test_data.columns) ].reshape(len_of_testdata, xCount)
-    # if model == 1:
-    #     testX = (testX - Original_mean) / Original_std
-    # test = np.append(np.ones((len_of_testdata, 1)), testX,axis=1)
-    # predict1 = predict(test, theta_values)
-    # print(predict1)
-    # # predict1 = predict(test, theta_values)
-    # return render_template('linear.html',predict1=predict1 )
 
 def featureNormalization(X):
     mean = np.mean(X, axis=0)
@@ -143,33 +94,26 @@ def predict(x, thetaP):
 
 def procedure(data_frame,learning_rate,epochs,model):
     data_frame = data_frame.sample(frac=1)
-    dftrain = data_frame[(len(data_frame) // 5):]
-    dftrain = dftrain.values
-    if model==0:
-        xCount=1
-    else:
-        xCount = len(data_frame.columns) - 1
+    if model == 1:
+        dftrain = data_frame[(len(data_frame) // 5):]
+        dftrain = dftrain.values
+        len_of_traindata = dftrain[:,0].size
+        x_training = np.append(np.ones((len_of_traindata, 1)), dftrain[:,0].reshape(len_of_traindata,1), axis=1)
+        y_training = dftrain[:,1].reshape(len_of_traindata,1)
+        theta = np.zeros((2, 1))
+        theta_values, J_history = gradientDescent(x_training, y_training, theta, learning_rate, epochs)
+        return theta_values, J_history, x_training, y_training
+    elif model > 1:
+        data_n2 = data_frame.values
+        m2 = len(data_n2[:, -1])
+        x_training = data_n2[:, 0:model].reshape(m2, 2)
+        x_training, mean_x_training, std_x_training = featureNormalization(x_training)
+        x_training = np.append(np.ones((m2, 1)), x_training, axis=1)
+        y_training = data_n2[:, -1].reshape(m2, 1)
+        theta = np.zeros((model+1, 1))
+        theta_values, J_history = gradientDescent(x_training, y_training, theta, learning_rate, epochs)
 
-    thetaCount = len(data_frame.columns) - 1
-    len_of_traindata= dftrain[:, -1].size
-    print(len_of_traindata)
-    # data_n2[:,0:2].reshape(m2,2)
-    X2=dftrain[:,0:len(data_frame.columns)-1].reshape(len_of_traindata,xCount)
-    if model==1:
-        X2, mean_X2, std_X2 = featureNormalization(X2)
-    else:
-        mean_X2=0
-        std_X2=0
-    x_training = np.append(np.ones((len_of_traindata, 1)),X2 , axis=1)
-
-    y_training = dftrain[:,1].reshape(len_of_traindata,1)
-
-    theta = np.zeros((thetaCount+1, 1))
-
-    theta_values, J_history = gradientDescent(x_training, y_training, theta, learning_rate, epochs)
-    # print("h(x) ="+str(round(theta_values[0,0],2))+" + "+str(round(theta_values[1,0],2))+"x1")
-    return theta_values, J_history, x_training, y_training,mean_X2,std_X2
-
+        return theta_values, J_history, x_training, y_training
  
 def gradientDescent(X, y, thetaG, alpha, num_iters):
     """
