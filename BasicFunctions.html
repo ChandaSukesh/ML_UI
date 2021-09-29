@@ -81,8 +81,6 @@
         #tableStyle tr:hover {
             background-color: rgb(165, 243, 129);
         }
-
-      
     </style>
 </head>
 
@@ -101,7 +99,7 @@
         <h2 style="margin-top: 1%;">{{message}}</h2>
     </div>
 
-    {%if flag==1%}
+    {%if flag==True%}
     <div id="tableStyle">
         <table>
             {% for i in h%}
@@ -115,9 +113,17 @@
     </div>
     {%endif%}
 
-    {%if flag==2%}
+    {%if flag==False%}
     <!-- for predicted option -->
+    <form action="{{ url_for('linearregression') }}" method="POST">
+
+        <input type="file" id="filename" name="filename"><br/><br/>
         
+        <input type="text" id="fname1" name="fname1"  placeholder="Learning Rate (preferable b/w 0.001 to 0.02)"><br/><br/>
+        <input type="text" id="fname2" name="fname2"  placeholder="Epochs value (preferable b/w 1000 to 10000)">
+        
+        <input type="submit" name="linear" value="Submit" class="submit">    
+    </form>
     {%endif%}
 </body>
 

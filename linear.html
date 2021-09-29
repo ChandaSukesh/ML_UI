@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Linear HTML</title>
+    </head>
+    <body>
+        <!-- {{predict1}} -->
+        <!-- <h1>Sukesh</h1> -->
+
+        <div id="tableStyle">
+            <table>
+                {% for i in predict1%}
+                <tr>
+                    {% for j in i%}
+                    <td>{{j}}</td>
+                    {%endfor%}
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+    </body>
+</html>
