@@ -35,8 +35,13 @@
         }
 
         .greybox {
-            background-color: red;
+            background-color: peachpuff;
             margin-top: 3%;
+            padding-bottom: 1%;
+            padding-top: 1%;
+            margin-left: 30%;
+            margin-right: 30%;
+            text-align: center;
         }
 
         .submit {
@@ -81,6 +86,59 @@
         #tableStyle tr:hover {
             background-color: rgb(165, 243, 129);
         }
+
+        .inputStyle {
+
+            width: 50%;
+            padding: 7px 40px;
+            margin: 15px 0;
+            box-sizing: border-box;
+            border: 5px solid green;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 26px;
+            font-family: Garamond, serif;
+
+
+        }
+
+        #cursive {
+            font-family: cursive;
+            font-size: large;
+            padding-left: 2%;
+        }
+
+        .choosingFile {
+            background-color: red;
+        }
+
+        /* ToolTip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 320px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
     </style>
 </head>
 
@@ -90,7 +148,7 @@
         <form action="{{ url_for('showData') }}" method="POST">
             <input type="submit" name="id" value="Head" class="submit">
             <input type="submit" name="id" value="Describe" class="submit">
-            <input type="submit" name="id" value="Plot Graph" class="submit">
+            <input type="submit" name="id" value="PlotGraph" class="submit">
             <input type="submit" name="id" value="Predict" class="submit">
         </form>
     </div>
@@ -99,12 +157,18 @@
         <h2 style="margin-top: 1%;">{{message}}</h2>
     </div>
 
-    {%if flag==True%}
+    {%if flag==1%}
+    <!-- <table style="background-color: tomato;">
+        <th>Describe</th>
+        <tr><td>Count</td></tr>
+        <tr><td>Sum</td></tr>
+    </table> -->
     <div id="tableStyle">
         <table>
             {% for i in h%}
             <tr>
                 {% for j in i%}
+
                 <td>{{j}}</td>
                 {%endfor%}
             </tr>
@@ -113,17 +177,40 @@
     </div>
     {%endif%}
 
-    {%if flag==False%}
-    <!-- for predicted option -->
-    <form action="{{ url_for('linearregression') }}" method="POST">
+    {%if flag==3%}
+    <div class="fileuploading">
+        <form action="{{ url_for('Graph') }}" method="POST">
+            <center>
+            <input type="text" name="xcol">
+            <input type="submit" value="submit" class="submit">
+            <center>
 
-        <input type="file" id="filename" name="filename"><br/><br/>
-        
-        <input type="text" id="fname1" name="fname1"  placeholder="Learning Rate (preferable b/w 0.001 to 0.02)"><br/><br/>
-        <input type="text" id="fname2" name="fname2"  placeholder="Epochs value (preferable b/w 1000 to 10000)">
-        
-        <input type="submit" name="linear" value="Submit" class="submit">    
-    </form>
+        </form>
+    </div>
+
+    {%endif%}
+    {%if flag==4%}
+    <!-- for predicted option -->
+    <div class="greybox">
+        <form action="{{ url_for('linearregression') }}" method="POST">
+
+            <input type="file" id="filename" name="filename"><br /><br />
+            <div class="tooltip" id="cursive">Hint
+                <span class="tooltiptext">
+                    Getting confused what to select..?
+                    Select Learning rate as 0.003 and Epochs values as 1100 to automate the process.
+                </span>
+            </div>
+            <br />
+            <input type="text" id="fname1" name="fname1" class="inputStyle" placeholder="Learning Rate">
+            <div id="cursive">Preferable between 0.001 to 0.02</div>
+
+            <br /><br />
+            <input type="text" id="fname2" name="fname2" class="inputStyle" placeholder="Epochs value ">
+            <div id="cursive">Preferable between 1000 to 5000</div>
+            <input type="submit" name="linear" value="Submit" class="submit">
+        </form>
+    </div>
     {%endif%}
 </body>
 

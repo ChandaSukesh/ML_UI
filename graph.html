@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <style>
+        .neonText {
+            text-align: center;
+            color: #fff;
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0fa,
+                0 0 82px #0fa,
+                0 0 92px #0fa,
+                0 0 102px #0fa,
+                0 0 151px #0fa;
+        }
+
+        .submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 7px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            margin-left: 8%;
+        }
+
+        .fileuploading {
+            background-color: white;
+            /* padding-top: 1%; */
+            padding-bottom: 1%;
+            margin-left: 30%;
+            margin-right: 30%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="neonText">MACHINE LEARNING TOOL BOX</h1>
+    <h3 style="text-align: center;">You have seen Graph </h3>
+
+    <div class="fileuploading">
+        <form action="{{ url_for('showData') }}" method="POST">
+            <center><input type="submit" value="Go Back!" class="submit"></center>
+        </form>
+    </div>
+</body>
+
+</html>

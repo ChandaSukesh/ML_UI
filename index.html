@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Visualization</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>Visualization</h1>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+        <script>
+            var first = document.getElementById("myChart").getContext("2d");
+            var myChart = new Chart(first, {
+                type: "line",
+                data: {
+                    labels: {{ x | safe }},
+                    datasets: [{
+                    pointRadius: 4,
+                    pointBackgroundColor: "rgba(0,0,255,1)",
+                    data: {{ y | safe}}
+                    }]
+                },
+                options:{
+                    responsive:false
+                }
+            });
+        </script>
+    </body>
+</html>

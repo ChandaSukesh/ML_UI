@@ -3,9 +3,73 @@
     <head>
         <title>Linear HTML</title>
     </head>
-    <body>
-        <!-- {{predict1}} -->
-        <!-- <h1>Sukesh</h1> -->
+    
+    <style>
+        .neonText {
+            text-align: center;
+            color: #fff;
+            text-shadow:
+                0 0 7px #fff,
+                0 0 10px #fff,
+                0 0 21px #fff,
+                0 0 42px #0fa,
+                0 0 82px #0fa,
+                0 0 92px #0fa,
+                0 0 102px #0fa,
+                0 0 151px #0fa;
+        }
+
+        .whitebox {
+            background-color: white;
+            /* padding-top: 1%; */
+            padding-bottom: 1%;
+            margin-left: 30%;
+            margin-right: 30%;
+            text-align: center;
+        }
+
+
+        /* table from here */
+        #tableStyle {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            /* width: 100%; */
+            text-align: center;
+            margin-left: 40%;
+            margin-top: 2%;
+        }
+
+        #tableStyle td,
+        #tableStyle th {
+            border: 1px solid rgb(212, 10, 10);
+            padding: 8px;
+            /* width: 80%; */
+        }
+
+        #tableStyle tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #tableStyle tr:nth-child(odd) {
+            background-color: orange;
+        }
+
+        #tableStyle tr:hover {
+            background-color: rgb(165, 243, 129);
+        }
+
+       
+    </style>
+    <!-- rgb(41, 26, 38); -->
+    <body style="background-color: rgb(41, 26, 38);">
+       
+        <h1 class="neonText">MACHINE LEARNING TOOL BOX</h1>
+        <div class="whitebox">
+            <h1>Hypothesis:</h1>
+            <h3>{{hypo}}</h3>
+            <h2 style="margin-top: 1%;">The below table shows Predicted values</h2>
+            
+        </div>
 
         <div id="tableStyle">
             <table>
