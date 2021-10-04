@@ -1,8 +1,11 @@
-from flask import Flask,render_template,request,session, sessions
+from flask import Flask,render_template,request,session, sessions,url_for
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as mat
+from sklearn.model_selection import train_test_split
+
+
 
 app = Flask(__name__) #creating the Flask class object 
 app.secret_key = "String dummy"
@@ -17,19 +20,31 @@ def textfile():
     filename=request.form.get("filename")
     df = pd.read_csv(filename,header=None)
     
-    if len(df.columns)>2:
-        modelName="Multi Variate"
-    else:
-        modelName="Uni Variate"
+    
     session["df"]=df.values.tolist()
     # session["dataframe"]=df
     # print(type(session["df"]))
-    return render_template('ClassReg.html',reads=df.values.tolist() ,modelName=modelName)
+    return render_template('ClassReg.html',reads=df.values.tolist())
 
 @app.route('/MainFunction', methods = ['GET','POST'])
 def MainFunction():
+    typename=request.form.get("typename")
+    # print(typename)
     df=session["df"]
-    return render_template('BasicFunctions.html')
+    if typename=="Click2":
+        val=2
+    else:
+        val=1
+    session["val"]=val
+    if(val==2):
+        if len(df[0])>2:
+            modelName="Multi Variate"
+        else:
+            modelName="Uni Variate"
+    else:
+        modelName="Binomial"
+    return render_template('BasicFunctions.html',modelName=modelName,val=val)
+
 
 @app.route('/showData', methods = ['GET','POST'])
 def showData():
@@ -38,6 +53,10 @@ def showData():
     # converting list to dataframe
     df=pd.DataFrame(df) 
 
+    if session["val"] == 1:
+        typename=1
+    else:
+        typename=2
     if(type=="Head"):
         content=df.head()
         message="The below table displays the top 5 rows in a given dataset"
@@ -47,63 +66,45 @@ def showData():
         message="The below table displays entire rows in a given dataset"
         flag=1
     if(type=="PlotGraph"):
-        message="Plotting the Graph for the given dataset"
+        message="Enter the column number to which you want to plot the Graph for X axis"
         flag=3
         content=df
-        # print(type(content))
-        # print(content)
-        # content=content.values.tolist()
-        # print("sukesj")
-        # print(len(content))
-        # print(content[3][3])
-        # xList=[]
-        # dict={}
-        # for i in range(1,1):
-        #     print(content[i])
-        #     for j in i:]
-        #         print(j)
-                # dict["x"]=j
-                # dict["y"]=
-            
-        #     xList.append(content[i][0])
-        # print(xList)
-        # print(content[0][0])
     if(type=="Predict"):
         message="Choose a test file with which you want to predict"
         flag=4
         content=df
-    return render_template('BasicFunctions.html', h=content.values.tolist(),message=message,flag=flag)
-    # 
-
+    return render_template('BasicFunctions.html', h=content.values.tolist(),message=message,flag=flag,typename=typename)
+    
 
 @app.route('/Graph', methods = ['GET','POST'])
 def Graph():
-    
-    # df=session["dataframe"]
-    # print(df.head())
-    
-    # 
-
     df=session["df"]
-    
     df=pd.DataFrame(df)
-    n=len(df.columns)
-    # print(df[0])
-    x=request.form.get("xcol")
-    print("***")
     
+    # if :
+    n=len(df.columns)
+    x=request.form.get("xcol")
+
     xval=df[int(x)]
     print(xval)
     y=df[n-1]
     mat.scatter(xval, y,c='blue')
     mat.show()
     print(y)
+    # else :
+    #     X = df.iloc[:, :-1].values
+    #     y = df.iloc[:, -1].values
+    #     pos, neg = (y == 1).reshape(len(df.index), 1), (y == 0).reshape(len(df.index), 1)
+
+    #     mat.scatter(X[pos[:, 0], 0], X[pos[:, 0], 1], c="r", marker="+")
+    #     mat.scatter(X[neg[:, 0], 0], X[neg[:, 0], 1], marker="o", s=10)
+    #     mat.xlabel("X - axis")
+    #     mat.ylabel("Y - axis")
+    #     mat.legend(["Positive", "Negative"], loc=0)
+    #     mat.show()
+    #     print(pos)
     # return render_template('graph.html')
    
-
-    # return render_template('index.html')
-
-
 
 @app.route('/linearregression', methods = ['GET','POST'])
 def linearregression():
@@ -136,6 +137,24 @@ def linearregression():
     predict1 = predict(test, theta_values)
 
     return render_template('linear.html',predict1=predict1,hypo=hypo)
+
+@app.route('/logisticregression', methods = ['GET','POST'])
+def logisticregression():
+    split_input=request.form.get("id")
+    if split_input==1:
+        split_ratio = 0.4
+    elif split_input == 2:
+        split_ratio = 0.3
+    elif split_input == 3:
+        split_ratio = 0.2
+    data=session["df"]
+    data=pd.DataFrame(data)
+
+    X = data.iloc[:, :-1].values
+    y = data.iloc[:, -1].values
+    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=split_ratio,random_state=1)
+    return render_template("graph.html")
+    
 
 def featureNormalization(X):
     mean = np.mean(X, axis=0)
